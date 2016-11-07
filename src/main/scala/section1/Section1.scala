@@ -27,12 +27,12 @@ object Section1 {
 
     // change if necessary the 'def' with 'val', 'var' or 'lazy val'
     // <start changes>
-    def x = {
+    val x = {
       trackEvaluations += "x"
       1
     }
 
-    def y = {
+    lazy val y = {
       trackEvaluations += "y"
       2
     }
@@ -45,6 +45,7 @@ object Section1 {
 
     z + y + x + z + y + x
 
+    println(trackEvaluations)
     trackEvaluations
   }
 }
