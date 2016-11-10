@@ -3,15 +3,15 @@ package section3
 object Section3 {
 
   case class User(
-    id: Int,
-    firstName: String,
-    lastName: String,
-    age: Option[Int],
-    gender: Option[String])
+                   id: Int,
+                   firstName: String,
+                   lastName: String,
+                   age: Option[Int],
+                   gender: Option[String])
 
   object UserRepository {
-    private val male = Some("male")
-    private val female = Some("female")
+    val male = Some("male")
+    val female = Some("female")
 
     private val users = Map(
       1 -> User(1, "John", "Doe", Some(32), male),
@@ -24,10 +24,25 @@ object Section3 {
     def findById(id: Int): Option[User] = users.get(id)
 
     def findAll = users.values
+
   }
 
-  def isMale(id: Int): Boolean = ???
+  def isMale(id: Int): Boolean = {
+    UserRepository.findById(id) match {
+      case None => false
+      case Some(user) => user.gender == UserRepository.male
+    }
+  }
 
-  def isUserAllowed(id: Int): Boolean = ???
+  def isUserAllowed(id: Int): Boolean = {
+    val allowedUser: Option[User] = for {
+      user <- UserRepository.findById(id)
+      gender <- user.gender
+      age <- user.age
+      if gender == "female"
+      if age >= 18
+    } yield user
+    allowedUser.isDefined;
+  }
 
 }
