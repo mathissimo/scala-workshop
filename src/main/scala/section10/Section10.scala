@@ -1,5 +1,7 @@
 package section10
 
+import scala.collection.mutable
+
 object Section10 {
   val text =
     """Scala (/ˈskɑːlə/ skah-lə) is an object-functional programming and scripting language for general software applications,
@@ -24,10 +26,21 @@ object Section10 {
     """.stripMargin
 
 
-  val words: Seq[String] = text.replace(","," ").replace(".", " ").replace("\n", " ").replace("\r", " ").replace("(", "").replace(")","").split(" ").toSeq
+  val words: Seq[String] = text.replace(",", " ").replace(".", " ").replace("\n", " ").replace("\r", " ").replace("(", "").replace(")", "").split(" ").toSeq
 
-  def wordsWithoutEmptyString: Seq[String] = ???
+  def wordsWithoutEmptyString: Seq[String] = for (
+    word <- words
+    if !word.trim.isEmpty
+  ) yield word
 
-  def dictionary: Map[Char, Seq[String]] = ???
+  val dictionary: Map[Char, Seq[String]] = {
+    val words = wordsWithoutEmptyString
+    val dictMap = Map[Char, Seq[String]]()
+
+    words.foldLeft(dictMap)((dictMap, word) => {
+      val key = word.charAt(0).toLower
+      dictMap + (key -> (dictMap.getOrElse(key, Seq()) :+ word))
+    })
+  }
 
 }
