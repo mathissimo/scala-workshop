@@ -15,20 +15,26 @@ object Section5 {
    *         Success[URL] when the url is valid
    *         Failure[Throwable] when the url is not valid
    */
-  def parseURL(url: String): Try[URL] = ???
+  def parseURL(url: String): Try[URL] = Try(new URL(url))
 
 
   /**
    * uses the URL parsed from the user input
    * If the user input is not a valid URL, use 'http://duckduckgo.com' instead
    */
-  def defaultSearchEngine(userInput: String): URL = ???
+  def defaultSearchEngine(userInput: String): URL = {
+    val duck = "http://duckduckgo.com"
+    val userSE = Try (new URL(userInput))
+    userSE.getOrElse(new URL(duck))
+  }
 
 
   /**
    * @return the protocol ('http', 'ftp'...) of the URL if valid
    */
-  def getProtocol(url: String): Try[String] = ???
+  def getProtocol(url: String): Try[String] = {
+    parseURL(url).map(_.getProtocol)
+  }
 
 
   /**
